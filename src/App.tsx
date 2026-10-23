@@ -6,6 +6,7 @@ function App() {
   const {
     snake,
     food,
+    foodColor,
     gameState,
     score,
     difficulty,
@@ -170,7 +171,7 @@ function App() {
             <div className="w-full h-full rounded-[2px] bg-inherit" />
             {index === 0 && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="drop-shadow-md" style={{ fontSize: `clamp(8px, ${percentPerCell * 0.6}vmin, 16px)` }}>👀</span>
+                <span className="drop-shadow-md" style={{ fontSize: `clamp(10px, ${percentPerCell * 0.8}vmin, 20px)` }}>🐉</span>
               </div>
             )}
           </motion.div>
@@ -178,10 +179,10 @@ function App() {
 
         {/* Food */}
         <motion.div
-          key={`${food.x}-${food.y}`}
+          key={`${food.x}-${food.y}-${foodColor}`}
           initial={{ scale: 0, rotate: 0 }}
-          animate={{ scale: [0, 1.2, 1], rotate: 360 }}
-          transition={{ duration: 0.4 }}
+          animate={{ scale: [0, 1.3, 1], rotate: 360 }}
+          transition={{ duration: 0.5 }}
           className="absolute flex items-center justify-center z-20"
           style={{
             left: `${food.x * percentPerCell}%`,
@@ -190,7 +191,9 @@ function App() {
             height: `${percentPerCell}%`,
           }}
         >
-          <div className="w-[75%] h-[75%] rounded-full bg-gradient-to-br from-red-400 to-rose-600 shadow-lg shadow-red-500/50 animate-pulse" />
+          <div className={`w-[75%] h-[75%] rounded-full bg-gradient-to-br ${foodColor} shadow-lg animate-pulse`}
+            style={{ boxShadow: '0 0 12px rgba(255,255,255,0.4)' }}
+          />
         </motion.div>
 
         {/* Overlay States */}

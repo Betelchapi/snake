@@ -48,6 +48,21 @@ export function useSnakeGame() {
     return { easy: 0, medium: 0, hard: 0 };
   });
 
+  const FOOD_COLORS = [
+    'from-red-400 to-rose-600',
+    'from-amber-400 to-orange-600',
+    'from-yellow-300 to-amber-500',
+    'from-lime-400 to-green-600',
+    'from-cyan-400 to-blue-600',
+    'from-violet-400 to-purple-600',
+    'from-pink-400 to-fuchsia-600',
+    'from-teal-400 to-emerald-600',
+  ];
+  const [foodColor, setFoodColor] = useState<string>(FOOD_COLORS[0]);
+  const foodColorRef = useRef<string>(FOOD_COLORS[0]);
+  const foodColorIndexRef = useRef<number>(0);
+  useEffect(() => { foodColorRef.current = foodColor; }, [foodColor]);
+
   const directionRef = useRef<Direction>(direction);
   const gameStateRef = useRef<GameState>(gameState);
   const snakeRef = useRef<Position[]>(snake);
@@ -84,6 +99,8 @@ export function useSnakeGame() {
     directionQueueRef.current = [];
     setScore(0);
     setGameState('idle');
+    foodColorIndexRef.current = 0;
+    setFoodColor(FOOD_COLORS[0]);
   }, []);
 
   const startGame = useCallback(() => {
@@ -166,6 +183,9 @@ export function useSnakeGame() {
         if (head.x === foodRef.current.x && head.y === foodRef.current.y) {
           setScore(s => s + (difficulty === 'easy' ? 1 : difficulty === 'medium' ? 2 : 3));
           setFood(getRandomPosition(newSnake));
+          // Change food color for next food
+          foodColorIndexRef.current = (foodColorIndexRef.current + 1) % FOOD_COLORS.length;
+          setFoodColor(FOOD_COLORS[foodColorIndexRef.current]);
         } else {
           newSnake.pop();
         }
@@ -180,6 +200,7 @@ export function useSnakeGame() {
   return {
     snake,
     food,
+    foodColor,
     direction,
     gameState,
     score,
